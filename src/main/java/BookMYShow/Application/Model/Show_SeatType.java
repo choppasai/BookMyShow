@@ -13,5 +13,5 @@ public class Show_SeatType extends Base{
     private Show show;
     @ManyToOne
     private SeatType seatType;
-    private Long price;
+    private Double price;
 }

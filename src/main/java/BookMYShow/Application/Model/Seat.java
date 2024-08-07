@@ -15,4 +15,7 @@ public class Seat extends Base{
     @ManyToOne
     @JoinColumn(name = "screen_Id")
     private Screen screen;
+    @ManyToOne
+    @JoinColumn(name = "ticket_id")
+    private Ticket ticket;
 }

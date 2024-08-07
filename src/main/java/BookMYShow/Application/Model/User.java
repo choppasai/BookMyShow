@@ -7,6 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
+
 public class User extends Base{
     private String name;
     private String password;

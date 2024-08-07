@@ -14,7 +14,7 @@ import java.util.Date;
 public class Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private Date createdAt;
     private Date lastModifiedAt;
 }

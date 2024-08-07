@@ -18,7 +18,7 @@ public class Ticket extends Base{
     private User user;
     @ManyToOne
     private Show show;
-    @OneToMany
+    @OneToMany(mappedBy = "ticket")
     private List<Seat> seatList;
     @OneToMany(mappedBy = "ticket")
     private List<Payment> paymentList;
