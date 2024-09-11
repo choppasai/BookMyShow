@@ -15,12 +15,12 @@ public class PriceCalculationServiceImpl implements PriceCalculationService {
     }
     @Override
     public Double totalCost(List<Show_Seat> seatList, Integer showId) {
-        Double amount = 0.0;
+        double amount = 0.0;
         int gst = 18;
-        List<Show_SeatType> seatTypes = showRepo.findAllSeatTypes(showId);
+        List<Show_SeatType> seatTypes = showRepo.findAllSeatTypesById(showId);
         for(Show_Seat seat : seatList){
             for(Show_SeatType seatType : seatTypes){
-                if(seat.getSeat().getSeatType().equals(seatTypes)){
+                if(seat.getSeat().getSeatType().equals(seatType.getSeatType())){
                     Double price = seatType.getPrice();
                     amount+= price +0.18*price;
                 }

@@ -4,6 +4,8 @@ package BookMYShow.Application.Service.Implementations;
 import BookMYShow.Application.DTOs.TicketResponseDTO;
 
 import BookMYShow.Application.Exception.InvalidSeat;
+import BookMYShow.Application.Exception.ShowNotFoundException;
+import BookMYShow.Application.Exception.UserNotFoundException;
 import BookMYShow.Application.Model.Enums.PaymentStatus;
 import BookMYShow.Application.Model.Enums.SeatStatus;
 import BookMYShow.Application.Model.Payment;
@@ -11,10 +13,10 @@ import BookMYShow.Application.Model.Show;
 import BookMYShow.Application.Model.Show_Seat;
 import BookMYShow.Application.Model.User;
 
-import BookMYShow.Application.Repository.PaymentFailed;
+import BookMYShow.Application.Exception.PaymentFailed;
 import BookMYShow.Application.Repository.ShowRepo;
 import BookMYShow.Application.Repository.Show_SeatRepo;
-import BookMYShow.Application.Repository.UserRepo;
+import BookMYShow.Application.Repository.UserRepository;
 import BookMYShow.Application.Service.TicketService;
 import org.springframework.stereotype.Service;
 
@@ -25,22 +27,26 @@ import java.util.TimeZone;
 
 @Service
 public class TicketServiceImpl implements TicketService {
-    private UserRepo userRepo;
-    private Show_SeatRepo showSeatRepo;
+    private final UserRepository userRepository;
+    private final Show_SeatRepo showSeatRepo;
 
-    private ShowRepo showRepo;
+    private final ShowRepo showRepo;
     private PriceCalculationServiceImpl priceCalculationService;
 
-    public TicketServiceImpl(UserRepo userRepo, Show_SeatRepo showSeatRepo, ShowRepo showRepo) {
-        this.userRepo = userRepo;
+    public TicketServiceImpl(UserRepository userRepository, Show_SeatRepo showSeatRepo, ShowRepo showRepo) {
+        this.userRepository = userRepository;
         this.showSeatRepo = showSeatRepo;
         this.showRepo = showRepo;
     }
 
     public TicketResponseDTO generateTicket(Integer userId, Integer showId, TimeZone startTime, TimeZone endTime, List<Integer> showSeatId)
-            throws InvalidSeat,PaymentFailed{
-        Optional<User> user = userRepo.findById(userId);
+            throws InvalidSeat,PaymentFailed,UserNotFoundException,ShowNotFoundException{
+        Optional<User> user = userRepository.findById(userId);
         Optional<Show> show = showRepo.findById(showId);
+        if(user.isEmpty())
+            throw new UserNotFoundException("invalid user id");
+        if(show.isEmpty())
+            throw new ShowNotFoundException("invalid show id");
         List<Show_Seat> showSeat = showSeatRepo.findAllById(showSeatId);
 
         TicketResponseDTO ticketResponseDTO = new TicketResponseDTO();
@@ -51,14 +57,14 @@ public class TicketServiceImpl implements TicketService {
         Double amount = priceCalculationService.totalCost(showSeat,showId);
         ticketResponseDTO.setAmount(amount);
 
-        List<Integer> tickets = new ArrayList<>();
+        List<Integer> seatIds = new ArrayList<>();
 
         synchronized (this){
             for(Show_Seat seat : showSeat){
                 if(seat.getSeatStatus() == SeatStatus.AVIALABLE){
                     seat.setSeatStatus(SeatStatus.BLOCKED);
                     showSeatRepo.save(seat);
-                    tickets.add(seat.getId());
+                    seatIds.add(seat.getId());
                 }
                 else{
                     throw new InvalidSeat("Seat is already booked/blocked");
@@ -80,13 +86,14 @@ public class TicketServiceImpl implements TicketService {
                 for(Show_Seat seat : showSeat){
                     seat.setSeatStatus(SeatStatus.AVIALABLE);
                     showSeatRepo.save(seat);
-                    tickets.remove(seat.getId());
+                    seatIds.remove(seat.getId());
                 }
                 throw new PaymentFailed("Payment failed");
             }
 
         }
 
+        ticketResponseDTO.setSeatList(seatIds);
         return ticketResponseDTO;
     }
 }
