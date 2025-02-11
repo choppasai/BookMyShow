@@ -1,6 +1,7 @@
 package BookMYShow.Application.Controller;
 
 import BookMYShow.Application.DTOs.*;
+import BookMYShow.Application.DTOs.EnumDtos.ResponseStatus;
 import BookMYShow.Application.Exception.MovieNotFoundException;
 import BookMYShow.Application.Exception.UserNotFoundException;
 import BookMYShow.Application.Model.Rating;

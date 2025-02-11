@@ -1,5 +1,6 @@
 package BookMYShow.Application.DTOs;
 
+import BookMYShow.Application.DTOs.EnumDtos.ResponseStatus;
 import BookMYShow.Application.Model.Rating;
 import lombok.Data;
 

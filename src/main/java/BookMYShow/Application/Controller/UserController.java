@@ -1,43 +1,66 @@
 package BookMYShow.Application.Controller;
 
+import BookMYShow.Application.DTOs.TokenDto;
 import BookMYShow.Application.DTOs.UserRequestDTO;
 import BookMYShow.Application.DTOs.UserSignUpDTO;
+import BookMYShow.Application.Exception.PasswordIncorrect;
+import BookMYShow.Application.Exception.UserAlreadyPresentException;
 import BookMYShow.Application.Exception.UserNotFoundException;
 import BookMYShow.Application.Service.Implementations.UserServiceImpl;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpStatusCodeException;
 
 @RestController
-@RequestMapping("/User")
+@RequestMapping("/users")
 public class UserController {
     private final UserServiceImpl userServiceImpl;
     public UserController(UserServiceImpl userServiceImpl){
         this.userServiceImpl = userServiceImpl;
     }
-    @GetMapping("/signIn")
-    public void signIn(@RequestBody UserRequestDTO userRequestDTO){
+
+    @PostMapping("/sign-up")
+    public void signUp(@RequestBody UserSignUpDTO userSignUpDTO){
+
         try{
-            userServiceImpl.signIn(userRequestDTO.getUserName(),userRequestDTO.getPassword());
+            userServiceImpl.signUP(userSignUpDTO);
+            ResponseEntity.status(HttpStatus.CREATED).body("Successfully signed in");
+        }
+        catch (UserAlreadyPresentException e){
+            ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody UserRequestDTO userRequestDTO){
+        try{
+            userServiceImpl.signIn(userRequestDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body("login successfull");
         }
         catch (UserNotFoundException e){
             e.getMessage();
-            UserSignUpDTO userSignUpDTO = new UserSignUpDTO();
-            userSignUpDTO.setUserName(userRequestDTO.getUserName());
-            userSignUpDTO.setPassword(userRequestDTO.getPassword());
-            userSignUpDTO.setConfirmPassword(userRequestDTO.getPassword());
-            signUp(userSignUpDTO);
+//            UserSignUpDTO userSignUpDTO = new UserSignUpDTO();
+//            userSignUpDTO.setUserName(userRequestDTO.getName());
+//            userSignUpDTO.setEmail(userRequestDTO.getEmail());
+//            userSignUpDTO.setPassword(userRequestDTO.getPassword());
+//            userSignUpDTO.setConfirmPassword(userRequestDTO.getPassword());
+//            signUp(userSignUpDTO);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("user not found");
+        }
+        catch (PasswordIncorrect e){
+            System.out.println("incorrect pass");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Incorrect password");
         }
 
     }
-    @GetMapping("")
-    public String sme(){
-        return "success";
-    }
-    @PostMapping("/signUp")
-    public ResponseEntity<String> signUp(@RequestBody UserSignUpDTO userSignUpDTO){
-        System.out.println("entered");
-        userServiceImpl.signUP(userSignUpDTO.getUserName(),userSignUpDTO.getPassword(),userSignUpDTO.getConfirmPassword());
-        return ResponseEntity.ok("registration done");
+
+
+
+    @PostMapping("/logout")
+    public void logout(@RequestBody TokenDto tokenDto){
+
     }
 }

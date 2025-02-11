@@ -1,6 +1,7 @@
 package BookMYShow.Application.DTOs;
 
 
+import BookMYShow.Application.DTOs.EnumDtos.ResponseStatus;
 import lombok.Data;
 
 @Data

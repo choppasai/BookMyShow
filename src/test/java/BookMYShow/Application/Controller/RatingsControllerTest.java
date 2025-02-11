@@ -1,6 +1,7 @@
 package BookMYShow.Application.Controller;
 
 import BookMYShow.Application.DTOs.*;
+import BookMYShow.Application.DTOs.EnumDtos.ResponseStatus;
 import BookMYShow.Application.Model.Movie;
 import BookMYShow.Application.Model.Rating;
 import BookMYShow.Application.Model.User;

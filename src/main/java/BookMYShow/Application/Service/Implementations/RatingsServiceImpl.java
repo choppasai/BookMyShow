@@ -16,6 +16,7 @@ import java.util.Optional;
 
 @Service
 public class RatingsServiceImpl implements RatingsService {
+
     private final UserRepository userRepository;
     private final RatingRepository ratingRepository;
     private final MovieRepository movieRepository;
