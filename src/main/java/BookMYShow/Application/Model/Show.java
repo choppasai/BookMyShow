@@ -13,7 +13,7 @@ import java.util.TimeZone;
 @Entity(name = "event")
 public class Show extends Base{
     private String name;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "Movie_id")
     private Movie movie;
 

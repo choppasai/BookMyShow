@@ -3,10 +3,7 @@ package BookMYShow.Application.Controller;
 import BookMYShow.Application.DTOs.ShowDTO;
 import BookMYShow.Application.DTOs.TicketRequestDTO;
 import BookMYShow.Application.DTOs.TicketResponseDTO;
-import BookMYShow.Application.Exception.InvalidSeat;
-import BookMYShow.Application.Exception.PaymentFailed;
-import BookMYShow.Application.Exception.ShowNotFoundException;
-import BookMYShow.Application.Exception.UserNotFoundException;
+import BookMYShow.Application.Exception.*;
 import BookMYShow.Application.Service.Implementations.TicketServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +26,7 @@ public class TicketController {
                     showDTO.getShowId(),showDTO.getShowStartTime(),showDTO.getShowEndTime(),
                     ticketRequestDTO.getShowSeatTypes());
         }
-        catch (InvalidSeat | PaymentFailed | UserNotFoundException | ShowNotFoundException e){
+        catch (InvalidSeat | PaymentFailed | UserNotFoundException | ShowNotFoundException | SeatLimitExceed e){
             e.getMessage();
         }
         return ResponseEntity.ok(ticketResponseDTO);

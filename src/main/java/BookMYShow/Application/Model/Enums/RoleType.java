@@ -1,0 +1,14 @@
+package BookMYShow.Application.Model.Enums;
+
+public enum RoleType {
+    ROLE_USER,
+    ROLE_PREMIUM_USER,
+    ROLE_CRITIC,
+    ROLE_ADMIN,
+    ROLE_MOVIE_MANAGER,
+    ROLE_EVENT_MANAGER,
+    ROLE_SUPPORT,
+    ROLE_THEATER_OWNER,
+    ROLE_VENDOR,
+    ROLE_MARKETING_MANAGER
+}

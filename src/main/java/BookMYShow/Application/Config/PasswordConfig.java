@@ -11,18 +11,22 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class PasswordConfig {
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())  // Disable CSRF for /signup endpoint
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("users/sign-up","users/login").permitAll()  // Allow signup requests
-                        .anyRequest().authenticated()  // Require auth for all other endpoints
-                )
-                .formLogin(login -> login.disable());
-
-        return http.build();
-    }
+    /*
+     * To bypass the authentication i used below code.
+     * But this security configuration I no longer needed because i am implementing spring autherization server.So i commented.
+     */
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http
+//                .csrf(csrf -> csrf.disable())  // Disable CSRF for /signup endpoint
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers("users/sign-up","users/login").permitAll()  // Allow signup requests
+//                        .anyRequest().authenticated()  // Require auth for all other endpoints
+//                )
+//                .formLogin(login -> login.disable());
+//
+//        return http.build();
+//    }
     @Bean
     public BCryptPasswordEncoder createBCryptPasswordEncoder(){
         return new BCryptPasswordEncoder();

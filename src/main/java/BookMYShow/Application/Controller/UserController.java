@@ -9,10 +9,10 @@ import BookMYShow.Application.Exception.UserNotFoundException;
 import BookMYShow.Application.Service.Implementations.UserServiceImpl;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpStatusCodeException;
+
 
 @RestController
 @RequestMapping("/users")
@@ -23,14 +23,14 @@ public class UserController {
     }
 
     @PostMapping("/sign-up")
-    public void signUp(@RequestBody UserSignUpDTO userSignUpDTO){
+    public ResponseEntity<String> signUp(@RequestBody UserSignUpDTO userSignUpDTO){
 
         try{
             userServiceImpl.signUP(userSignUpDTO);
-            ResponseEntity.status(HttpStatus.CREATED).body("Successfully signed in");
+            return ResponseEntity.status(HttpStatus.CREATED).body("Successfully signed in");
         }
         catch (UserAlreadyPresentException e){
-            ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
         }
     }
 
