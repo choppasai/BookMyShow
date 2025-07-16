@@ -1,8 +1,7 @@
 # 🎟️ Event booking application – Backend System (Java + Spring Boot)
 
-This project is a Java-based clone of an online ticket booking platform (like BookMyShow), built with Spring Boot, Hibernate/JPA, MySQL, Redis, and Apache Kafka. It provides RESTful APIs for user authentication, event/show listings, seat selection, and ticket booking.
+ This project is a Java-based clone of an online ticket booking platform (like BookMyShow), built with Spring Boot, Hibernate/JPA, MySQL, Redis, and Apache Kafka. It provides RESTful APIs for user authentication, event/show listings, seat selection, and ticket booking.
 Key system design elements include JWT-based user authentication, an optimistic locking mechanism to prevent double-booking of seats, and an asynchronous, event-driven architecture using Kafka for reliable inter-service communication.
----
 
 ## 🚀 Tech Stack
 
